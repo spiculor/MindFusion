@@ -13,8 +13,8 @@
 - Docker Compose
 1. Клонируйте репозиторий:
    ```bash
-   git clone <ссылка на репозиторий>
-   cd <название проекта>
+   git clone https://github.com/spiculor/MindFusion
+   cd MindFusion
 2.Запуск контейнеров
    docker-compose up -
 3.Выполните миграции
