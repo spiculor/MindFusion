@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Select a user to chat with:</h2>
+
+<ul id="userList">
+    {% for user in users %}
+        <li>
+            <a href="#" onclick="startChat('{{ user.id }}')">{{ user.username }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<script>
+    function startChat(userId) {
+
+        const ws = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+
+        window.location.href = `/chat/${userId}`;
+    }
+</script>
+{% endblock %}

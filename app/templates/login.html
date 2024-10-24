@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const username = formData.get("username");
+            const password = formData.get("password");
+
+            try {
+                const response = await fetch("/token", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem("token", data.access_token);
+                    alert("Login successful! Token saved.");
+                    window.location.href = "/chat";
+                } else {
+                    alert("Invalid credentials, please try again.");
+                }
+            } catch (error) {
+                console.error("Error logging in:", error);
+            }
+        });
+    </script>
+{% endblock %}

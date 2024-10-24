@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Chat with {{ selected_user.username }}</h2>
+
+<div>
+    <h3>Messages</h3>
+    <ul id="messagesList">
+        {% for message in messages %}
+            <li><strong>{{ message.sender.username }}:</strong> {{ message.content }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<form id="messageForm">
+    <input type="text" id="messageInput" placeholder="Type your message..." required>
+    <button type="submit">Send</button>
+</form>
+
+<script>
+    const userId = "{{ selected_user.id }}";
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("You need to login first.");
+        window.location.href = "/login";
+    } else {
+        const ws = new WebSocket(`ws://localhost:8000/ws/${userId}?token=${token}`);
+
+        ws.onmessage = function(event) {
+            const messagesList = document.getElementById('messagesList');
+            const newMessage = document.createElement('li');
+            newMessage.textContent = event.data;
+            messagesList.appendChild(newMessage);
+        };
+
+        const form = document.getElementById('messageForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const input = document.getElementById('messageInput');
+            ws.send(input.value);
+            input.value = '';
+        });
+    }
+</script>
+{% endblock %}
