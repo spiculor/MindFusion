@@ -3,20 +3,20 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 
-# Импорт моделей
-from app.models import Base  # Убедись, что в app.models импортированы User и Message
 
-# Настройка конфигурации Alembic
+from app.models import Base  
+
+
 config = context.config
 
-# Настройка логирования
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Указываем метаданные моделей для автогенерации миграций
+
 target_metadata = Base.metadata
 
-# Функции для онлайн и оффлайн миграций
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
